@@ -27,53 +27,53 @@ public class EmployeeController {
         this.employeeModelAssembler = employeeModelAssembler;
     }
 
-//    @GetMapping("/employees")
-//    List<Employee> all() {
-//        return repository.findAll();
-//    }
-
     @GetMapping("/employees")
-    public CollectionModel<EntityModel<Employee>> all() {
-        List<EntityModel<Employee>> employees = repository.findAll()
-                .stream()
-                .map(employeeModelAssembler::toModel)
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(
-                employees,
-                linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
+    public List<Employee> all() {
+        return repository.findAll();
     }
 
-//    @PostMapping("/employees")
-//    public Employee newEmployee(@RequestBody Employee newEmployee) {
-//        return repository.save(newEmployee);
-//    }
-
-//    @GetMapping("/employees/{id}")
-//    Employee one(@PathVariable Long id) {
-//        return repository.findById(id).
-//                orElseThrow(() -> new EmployeeNotFoundException(id));
+//    @GetMapping("/employees")
+//    public CollectionModel<EntityModel<Employee>> all() {
+//        List<EntityModel<Employee>> employees = repository.findAll()
+//                .stream()
+//                .map(employeeModelAssembler::toModel)
+//                .collect(Collectors.toList());
+//
+//        return CollectionModel.of(
+//                employees,
+//                linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
 //    }
 
     @PostMapping("/employees")
-    public ResponseEntity<?> newEmployee(@RequestBody Employee newEmployee) {
-        EntityModel<Employee> entityModel = employeeModelAssembler
-                .toModel(repository.save(newEmployee));
-
-        return ResponseEntity
-                .created(entityModel
-                        .getRequiredLink(IanaLinkRelations.SELF)
-                        .toUri())
-                .body(entityModel);
+    public Employee newEmployee(@RequestBody Employee newEmployee) {
+        return repository.save(newEmployee);
     }
+
+//    @PostMapping("/employees")
+//    public ResponseEntity<?> newEmployee(@RequestBody Employee newEmployee) {
+//        EntityModel<Employee> entityModel = employeeModelAssembler
+//                .toModel(repository.save(newEmployee));
+//
+//        return ResponseEntity
+//                .created(entityModel
+//                        .getRequiredLink(IanaLinkRelations.SELF)
+//                        .toUri())
+//                .body(entityModel);
+//    }
 
     @GetMapping("/employees/{id}")
-    public EntityModel<Employee> one(@PathVariable Long id) {
-        Employee employee = repository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
-
-        return employeeModelAssembler.toModel(employee);
+    public Employee one(@PathVariable Long id) {
+        return repository.findById(id).
+                orElseThrow(() -> new EmployeeNotFoundException(id));
     }
+
+//    @GetMapping("/employees/{id}")
+//    public EntityModel<Employee> one(@PathVariable Long id) {
+//        Employee employee = repository.findById(id)
+//                .orElseThrow(() -> new EmployeeNotFoundException(id));
+//
+//        return employeeModelAssembler.toModel(employee);
+//    }
 
 //    @PutMapping("/employees/{id}")
 //    public Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
